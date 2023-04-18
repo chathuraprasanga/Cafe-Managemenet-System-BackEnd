@@ -1,5 +1,8 @@
 package com.inn.cafe.serviceImpl;
 
+import com.inn.cafe.JWT.CustomerUserDetailsService;
+import com.inn.cafe.JWT.JwtFilter;
+import com.inn.cafe.JWT.JwtUtil;
 import com.inn.cafe.POJO.User;
 import com.inn.cafe.constants.CafeConstants;
 import com.inn.cafe.dao.UserDao;
@@ -9,6 +12,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -20,6 +26,15 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     UserDao userDao;
+
+    @Autowired
+    AuthenticationManager authenticationManager;
+
+    @Autowired
+    CustomerUserDetailsService customerUserDetailsService;
+
+    @Autowired
+    JwtUtil jwtUtil;
 
 
 //    Developer ID = Chathura Prasanga
@@ -46,7 +61,6 @@ public class UserServiceImpl implements UserService {
         return CafeUtils.getResponseEntity(CafeConstants.SOMETHINNG_WENT_WRONG,HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-
 //    Developer ID = Chathura Prasanga
 //    Date = 18.04.2023
     private boolean validateSignUpMap(Map<String,String> requestMap){
@@ -70,6 +84,31 @@ public class UserServiceImpl implements UserService {
         user.setStatus("false");
         user.setRole("user");
         return user;
+    }
+
+    @Override
+    public ResponseEntity<String> login(Map<String, String> requestMap) {
+        log.info("Inside Login");
+        try {
+            Authentication auth = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(requestMap.get("email"),requestMap.get("password"))
+            );
+            if (auth.isAuthenticated()) {
+                if (customerUserDetailsService.getUserDetail().getStatus().equalsIgnoreCase("true")){
+                    return new ResponseEntity<String>("{\"token\":\""+
+                            jwtUtil.generateToken(customerUserDetailsService.getUserDetail().getEmail(),
+                                    customerUserDetailsService.getUserDetail().getRole()) + "\"}",
+                    HttpStatus.OK);
+                }else {
+                    return new ResponseEntity<String>("{\"message\":\""+"Wait for AdminApproval."+"\"}",
+                            HttpStatus.BAD_REQUEST);
+                }
+            }
+        }catch (Exception ex){
+            log.error("{}",ex);
+        }
+        return new ResponseEntity<String>("{\"message\":\""+"Bad Credentials."+"\"}",
+                HttpStatus.BAD_REQUEST);
     }
 
 }
