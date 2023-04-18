@@ -1,7 +1,6 @@
 package com.inn.cafe.serviceImpl;
 
 import com.inn.cafe.JWT.CustomerUserDetailsService;
-import com.inn.cafe.JWT.JwtFilter;
 import com.inn.cafe.JWT.JwtUtil;
 import com.inn.cafe.POJO.User;
 import com.inn.cafe.constants.CafeConstants;
