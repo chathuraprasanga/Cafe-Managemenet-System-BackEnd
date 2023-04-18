@@ -2,6 +2,10 @@ package com.inn.cafe.JWT;
 
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -18,7 +22,7 @@ public class JwtFilter extends OncePerRequestFilter {
     private  JwtUtil jwtUtil;
 
     @Autowired
-    private CustomerUserDetailsService customerUserDetailsService;
+    private CustomerUserDetailsService service;
 
     Claims claims = null;
     private String userName = null;
@@ -35,6 +39,19 @@ public class JwtFilter extends OncePerRequestFilter {
             if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")){
                 token = authorizationHeader.substring(7);
                 userName = jwtUtil.extractUsername(token);
+                claims = jwtUtil.extractAllClaims(token);
+            }
+
+            if (userName != null && SecurityContextHolder.getContext().getAuthentication()==null){
+                UserDetails userDetails = service.loadUserByUsername(userName);
+                if (jwtUtil.validateToken(token,userDetails)){
+                    UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                            new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
+                    usernamePasswordAuthenticationToken.setDetails(
+                            new WebAuthenticationDetailsSource().buildDetails(httpServletRequest)
+                    );
+                    SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                }
             }
         }
 
