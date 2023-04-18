@@ -53,7 +53,15 @@ public class JwtFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
                 }
             }
+            filterChain.doFilter(httpServletRequest,httpServletResponse);
         }
+    }
 
+    public boolean isAdmin(){
+        return "admin".equalsIgnoreCase((String) claims.get("role"));
+    }
+
+    public String getCurrentUser(){
+        return userName;
     }
 }
