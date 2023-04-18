@@ -15,6 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+//    Developer ID = Chathura Prasanga
+//    Date = 18.04.2023
+
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
@@ -64,4 +67,8 @@ public class JwtFilter extends OncePerRequestFilter {
     public String getCurrentUser(){
         return userName;
     }
+
+
+
+
 }
