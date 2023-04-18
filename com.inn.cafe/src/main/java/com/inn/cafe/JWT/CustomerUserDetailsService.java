@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Objects;
 
+//    Developer ID = Chathura Prasanga
+//    Date = 18.04.2023
+
 @Slf4j
 @Service
 public class CustomerUserDetailsService implements UserDetailsService {
