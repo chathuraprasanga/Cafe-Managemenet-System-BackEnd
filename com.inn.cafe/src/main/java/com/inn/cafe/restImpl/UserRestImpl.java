@@ -30,7 +30,7 @@ public class UserRestImpl implements UserRest {
        }catch (Exception ex){
            ex.printStackTrace();
        }
-       return CafeUtils.getResponseEntity(CafeConstants.SOMETHINNG_WENT_WRONG,HttpStatus.INTERNAL_SERVER_ERROR);
+       return CafeUtils.getResponseEntity(CafeConstants.SOMETHING_WENT_WRONG,HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @Override
@@ -40,8 +40,11 @@ public class UserRestImpl implements UserRest {
         }catch (Exception ex){
             ex.printStackTrace();
         }
-        return CafeUtils.getResponseEntity(CafeConstants.SOMETHINNG_WENT_WRONG,HttpStatus.INTERNAL_SERVER_ERROR);
+        return CafeUtils.getResponseEntity(CafeConstants.SOMETHING_WENT_WRONG,HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+//    Developer ID = Chathura Prasanga
+//    Date = 19.04.2023
 
     @Override
     public ResponseEntity<List<UserWrapper>> getAllUser() {
@@ -51,6 +54,16 @@ public class UserRestImpl implements UserRest {
             ex.printStackTrace();
         }
         return new ResponseEntity<List<UserWrapper>>(new ArrayList<>(),HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Override
+    public ResponseEntity<String> update(Map<String, String> requestMap) {
+       try {
+            return userService.update(requestMap);
+       }catch (Exception ex){
+           ex.printStackTrace();
+       }
+       return CafeUtils.getResponseEntity(CafeConstants.SOMETHING_WENT_WRONG,HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 

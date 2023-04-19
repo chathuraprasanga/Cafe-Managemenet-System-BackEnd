@@ -1,5 +1,6 @@
 package com.inn.cafe.serviceImpl;
 
+import com.google.gson.annotations.Since;
 import com.inn.cafe.JWT.CustomerUserDetailsService;
 import com.inn.cafe.JWT.JwtFilter;
 import com.inn.cafe.JWT.JwtUtil;
@@ -18,10 +19,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -64,7 +62,7 @@ public class UserServiceImpl implements UserService {
         }catch (Exception ex){
             ex.printStackTrace();
         }
-        return CafeUtils.getResponseEntity(CafeConstants.SOMETHINNG_WENT_WRONG,HttpStatus.INTERNAL_SERVER_ERROR);
+        return CafeUtils.getResponseEntity(CafeConstants.SOMETHING_WENT_WRONG,HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 //    Developer ID = Chathura Prasanga
@@ -117,11 +115,14 @@ public class UserServiceImpl implements UserService {
                 HttpStatus.BAD_REQUEST);
     }
 
+//  developer id = chathura prasanga
+//  date = 19.04.2023
+
     @Override
     public ResponseEntity<List<UserWrapper>> getAllUser() {
         try{
             if (jwtFilter.isAdmin()){
-
+                return new ResponseEntity<>(userDao.getAllUser(),HttpStatus.OK);
             }else {
                 return new ResponseEntity<>(new ArrayList<>(),HttpStatus.UNAUTHORIZED);
             }
@@ -132,4 +133,23 @@ public class UserServiceImpl implements UserService {
     }
 
 
+    @Override
+    public ResponseEntity<String> update(Map<String, String> requestMap) {
+        try {
+            if (jwtFilter.isAdmin()){
+                Optional<User> optional = userDao.findById(Integer.parseInt(requestMap.get("id")));
+                if (!optional.isEmpty()){
+                    userDao.updateStatus(requestMap.get("status"),Integer.parseInt(requestMap.get("id")));
+                    return CafeUtils.getResponseEntity("User Status Updated Successfully",HttpStatus.OK);
+                }else {
+                    return CafeUtils.getResponseEntity("User id doesn't exist", HttpStatus.OK);
+                }
+            }else {
+                return CafeUtils.getResponseEntity(CafeConstants.UNAUTHORIZED_ACCESS,HttpStatus.UNAUTHORIZED);
+            }
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return CafeUtils.getResponseEntity(CafeConstants.SOMETHING_WENT_WRONG,HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
