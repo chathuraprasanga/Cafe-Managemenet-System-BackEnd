@@ -69,4 +69,13 @@ public class ProductServiceImpl implements ProductService {
         return product;
     }
 
+//    @Override
+//    public ResponseEntity<List<ProductWrapper>> getAllProduct() {
+//        try {
+//            return new ResponseEntity<>(productDao.getAllProduct(),HttpStatus.OK);
+//        }catch (Exception ex){
+//            ex.printStackTrace();
+//        }
+//        return new ResponseEntity<>(new ArrayList<>(),HttpStatus.INTERNAL_SERVER_ERROR);
+//    }
 }
