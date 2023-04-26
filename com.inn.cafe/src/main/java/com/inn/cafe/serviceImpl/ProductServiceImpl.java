@@ -29,6 +29,7 @@ public class ProductServiceImpl implements ProductService {
             if (jwtFilter.isAdmin()){
                 if (validateProductMap(requestMap,false)){
                    productDao.save(getProductFromMap(requestMap, false));
+                   return CafeUtils.getResponseEntity("Product Added Successfully. ",HttpStatus.OK);
                 }
                 return CafeUtils.getResponseEntity(CafeConstants.INVALID_DATA,HttpStatus.BAD_REQUEST);
             }else
