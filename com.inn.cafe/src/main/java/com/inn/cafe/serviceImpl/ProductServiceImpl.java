@@ -7,11 +7,13 @@ import com.inn.cafe.constants.CafeConstants;
 import com.inn.cafe.dao.ProductDao;
 import com.inn.cafe.service.ProductService;
 import com.inn.cafe.utils.CafeUtils;
+import com.inn.cafe.wrapper.ProductWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -69,13 +71,13 @@ public class ProductServiceImpl implements ProductService {
         return product;
     }
 
-//    @Override
-//    public ResponseEntity<List<ProductWrapper>> getAllProduct() {
-//        try {
-//            return new ResponseEntity<>(productDao.getAllProduct(),HttpStatus.OK);
-//        }catch (Exception ex){
-//            ex.printStackTrace();
-//        }
-//        return new ResponseEntity<>(new ArrayList<>(),HttpStatus.INTERNAL_SERVER_ERROR);
-//    }
+    @Override
+    public ResponseEntity<List<ProductWrapper>> getAllProduct() {
+        try {
+
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return null;
+    }
 }

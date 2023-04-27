@@ -33,7 +33,7 @@ public class ProductRestImpl implements ProductRest {
     @Override
     public ResponseEntity<List<ProductWrapper>> getAllProduct() {
         try {
-
+            return productService.getAllProduct();
         }catch (Exception ex){
             ex.printStackTrace();
         }
