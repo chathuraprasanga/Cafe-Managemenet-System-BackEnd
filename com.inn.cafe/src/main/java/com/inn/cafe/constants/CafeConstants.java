@@ -11,4 +11,6 @@ public class CafeConstants {
 
     public static final String UNAUTHORIZED_ACCESS = "Unauthorized Access.";
 
+    public static final String STORE_LOCATION = "C:\\Users\\Chathura Prasanga\\Desktop\\HOM system\\Store Pdf";
+
 }
