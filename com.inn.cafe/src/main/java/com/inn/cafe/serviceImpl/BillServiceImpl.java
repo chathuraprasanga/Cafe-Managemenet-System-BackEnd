@@ -26,6 +26,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 @Slf4j
@@ -172,7 +173,7 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public ResponseEntity<List<Bill>> getBills() {
-        List<Bill> list = new ArrayList<>();
+        List<Bill> list = new  ArrayList<>();
         if (jwtFilter.isAdmin()){
             list = billDao.getAllBills();
         }else {
@@ -210,5 +211,20 @@ public class BillServiceImpl implements BillService {
         byte[] byteArray = IOUtils.toByteArray(targetStream);
         targetStream.close();
         return byteArray;
+    }
+
+    @Override
+    public ResponseEntity<String> deleteBiil(Integer id) {
+        try {
+            Optional optional = billDao.findById(id);
+            if (optional.isPresent()){
+                billDao.deleteById(id);
+                return CafeUtils.getResponseEntity("Bill deleted successfully. ",HttpStatus.OK);
+            }
+            return CafeUtils.getResponseEntity("Bill id does not exist. ",HttpStatus.OK);
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return CafeUtils.getResponseEntity(CafeConstants.SOMETHING_WENT_WRONG,HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
